@@ -3,10 +3,10 @@ import {
   index,
   integer,
   pgTableCreator,
-  primaryKey,
+  primaryKey, serial,
   text,
   timestamp,
-  varchar,
+  varchar
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -17,27 +17,6 @@ import { type AdapterAccount } from "next-auth/adapters";
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
 export const createTable = pgTableCreator((name) => `linkmmik_${name}`);
-
-export const posts = createTable(
-  "post",
-  {
-    id: integer("id").primaryKey().generatedByDefaultAsIdentity(),
-    name: varchar("name", { length: 256 }),
-    createdById: varchar("created_by", { length: 255 })
-      .notNull()
-      .references(() => users.id),
-    createdAt: timestamp("created_at", { withTimezone: true })
-      .default(sql`CURRENT_TIMESTAMP`)
-      .notNull(),
-    updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(
-      () => new Date()
-    ),
-  },
-  (example) => ({
-    createdByIdIdx: index("created_by_idx").on(example.createdById),
-    nameIndex: index("name_idx").on(example.name),
-  })
-);
 
 export const users = createTable("user", {
   id: varchar("id", { length: 255 })
@@ -52,10 +31,6 @@ export const users = createTable("user", {
   }).default(sql`CURRENT_TIMESTAMP`),
   image: varchar("image", { length: 255 }),
 });
-
-export const usersRelations = relations(users, ({ many }) => ({
-  accounts: many(accounts),
-}));
 
 export const accounts = createTable(
   "account",
@@ -127,3 +102,13 @@ export const verificationTokens = createTable(
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
   })
 );
+
+export const links = createTable("links", {
+  id: serial("id"),
+  userId: varchar("userId", { length: 255 }),
+  shortUrl: varchar("shortUrl", { length: 255 }),
+  longUrl: varchar("longUrl", { length: 255 }),
+  title: varchar("title", { length: 255 }),
+  description: varchar("description", { length: 255 }),
+  imageUrl: varchar("imageUrl", { length: 255 }),
+});
