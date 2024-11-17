@@ -1,4 +1,4 @@
-# linkmmik - url manager
+# [linkmmik.app](https://linkmmik.app)
 
 ### Installation
 
