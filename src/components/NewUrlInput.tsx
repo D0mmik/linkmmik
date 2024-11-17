@@ -1,39 +1,66 @@
-"use client"
+"use client";
 import { Button, Input } from "@nextui-org/react";
 import NewLink from "~/server/actions";
 import { type KeyboardEvent, useState } from "react";
 import { Copy } from "lucide-react";
+import {Link} from "@nextui-org/link";
+import {useSession} from "next-auth/react";
 
 export default function NewUrlInput() {
+  const [longUrl, setLongUrl] = useState("");
+  const [shortUrl, setShortUrl] = useState("");
+  const [loading , setLoading] = useState(false);
+  const session = useSession()
 
-  const [url, setUrl] = useState("")
-
-  const paste = async () => { await navigator.clipboard.readText().then((t) => setUrl(t)) }
+  const paste = async () => {
+    try {
+      await navigator.clipboard.readText().then((t) => setLongUrl(t));
+    } catch (e) {
+      console.log(e)
+    }
+  };
 
   const submit = async () => {
-    await NewLink(url)
-    setUrl("")
-  }
+    setLoading(true)
+    setShortUrl(await NewLink(longUrl))
+    setLongUrl("");
+    setLoading(false)
+  };
 
   const handleKeyDown = async (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
-      await submit()
-    }
-  }
+    if (e.key !== "Enter") return;
+      await submit();
+  };
 
   return (
-    <div className="flex gap-2">
-      <Input placeholder="Please provide url"
-             onChange={(e) => setUrl(e.target.value)}
-             isInvalid={!URL.canParse(url) && url.length !== 0}
-             errorMessage="Please provide a correct URL"
-             value={url}
-             onKeyDown={handleKeyDown}
-      />
-      <Button isIconOnly variant="faded" color="primary" onClick={paste}>
-        <Copy size={20} />
-      </Button>
-      <Button color="primary" onClick={submit} isDisabled={!URL.canParse(url) || url.length === 0}>Submit</Button>
+    <div>
+      <div className="flex gap-2">
+        <Input
+          placeholder="Please provide url"
+          onChange={(e) => setLongUrl(e.target.value)}
+          isInvalid={!URL.canParse(longUrl) && longUrl.length !== 0}
+          errorMessage="Please provide a correct URL"
+          value={longUrl}
+          onKeyDown={handleKeyDown}
+        />
+        <Button isIconOnly variant="faded" color="primary" onClick={paste}>
+          <Copy size={20} />
+        </Button>
+        <Button
+          color="primary"
+          onClick={submit}
+          isDisabled={!URL.canParse(longUrl) || longUrl.length === 0}
+          isLoading={loading}
+        >
+          Submit
+        </Button>
+      </div>
+      <div className="flex justify-center">
+        <div className="flex justify-center flex-col items-center">
+          <Link className="text-lg m-2" target="_blank" href={shortUrl}>{shortUrl}</Link>
+          {!session.data?.user && (shortUrl && <p className="text-gray-400 font-light m-2">To save your URL, please sign in to your account.</p>)}
+        </div>
+      </div>
     </div>
-  )
+  );
 }

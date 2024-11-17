@@ -10,7 +10,7 @@ import Navbar from "~/components/Navbar";
 export const metadata: Metadata = {
   title: "linkmmik",
   description: "linkmmik - url manager",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
+  icons: [{ rel: "icon", url: "/icon.ico" }],
 };
 
 export default async function RootLayout({
@@ -24,7 +24,6 @@ export default async function RootLayout({
       <body>
       <SessionProvider session={session}>
         <Providers>
-          <Navbar/>
           {children}
         </Providers>
       </SessionProvider>

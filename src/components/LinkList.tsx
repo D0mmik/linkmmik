@@ -5,6 +5,7 @@ import Link from "next/link";
 import { Divider } from "@nextui-org/react";
 import { auth } from "~/server/auth";
 import { selectAllLinks } from "~/server/db/links";
+import {redirect} from "next/navigation";
 
 const BASE_URL = process.env.BASE_URL;
 
@@ -14,20 +15,20 @@ export default async function LinkList() {
   const links = session?.user?.id ? await selectAllLinks(session?.user?.id) : null
 
   if (!links) {
-    return null
+    redirect("/")
   }
 
   return (
     <div className="flex justify-center flex-col items-center">
-      Links page
-      <div className="flex flex-col gap-1 w-2/3">
+      <p className="m-2">Links page</p>
+      <div className="flex flex-col gap-1 w-2/3 max-sm:w-11/12">
         <Card>
-          {links.map((link: LinkType) =>
+          {links.reverse().map((link: LinkType) =>
             <Fragment key={link.shortUrl}>
               <CardBody as={Link} target="_blank" href={`${BASE_URL}/${link.shortUrl ?? ""}`}>
-                <p>{link.shortUrl}</p>
-                <p>{link.longUrl}</p>
-                <p>{link.userId}</p>
+                <p>Short url key: {link.shortUrl}</p>
+                <p>Long Url {link.longUrl}</p>
+                <p>Click to open</p>
               </CardBody>
               <Divider />
             </Fragment>

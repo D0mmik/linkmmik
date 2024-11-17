@@ -1,3 +1,4 @@
+"use server";
 import { redirect } from "next/navigation";
 import { selectLongUrl } from "~/server/db/links";
 import LinkNotFound from "~/components/LinkNotFound";
