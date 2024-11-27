@@ -9,14 +9,12 @@ export default async function NewLink(longUrl: string) {
   const session = await auth();
   const key = await generateShortKey();
 
-  if (session?.user) {
-    await insertLink({
-      id: 0,
-      longUrl: longUrl,
-      shortUrl: key,
-      userId: session?.user?.id,
-    });
-  }
+  await insertLink({
+    id: 0,
+    longUrl: longUrl,
+    shortUrl: key,
+    userId: session?.user?.id,
+  });
 
   revalidatePath("/");
   return `${BASE_URL}/${key}`;
