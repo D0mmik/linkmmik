@@ -1,10 +1,10 @@
 "use client";
 import { Button, Input } from "@nextui-org/react";
-import NewLink from "~/server/actions";
 import { type KeyboardEvent, useState } from "react";
 import { Copy } from "lucide-react";
 import {Link} from "@nextui-org/link";
 import {useSession} from "next-auth/react";
+import { NewLink } from "~/server/actions";
 
 export default function NewUrlInput() {
   const [longUrl, setLongUrl] = useState("");

@@ -1,10 +1,15 @@
+"use server"
 import { links } from "~/server/db/schema";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
 import { type Link } from "~/types";
 
-export function insertLink(link: Link) {
+export async function insertLink(link: Link) {
   return db.insert(links).values(link).execute()
+}
+
+export async function removeLink(id: number) {
+  return db.delete(links).where(eq(links.id, id))
 }
 
 export async function selectAllLinks(userId: string) {
