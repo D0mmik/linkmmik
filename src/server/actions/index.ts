@@ -1,7 +1,7 @@
 "use server";
 import { insertLink, shortKeyExists } from "~/server/db/links";
 import { auth } from "~/server/auth";
-import { revalidatePath } from "next/cache";
+import {revalidatePath, revalidateTag} from "next/cache";
 
 const BASE_URL = process.env.BASE_URL;
 
@@ -16,7 +16,7 @@ export default async function NewLink(longUrl: string) {
     userId: session?.user?.id,
   });
 
-  revalidatePath("/");
+  revalidateTag("links")
   return `${BASE_URL}/${key}`;
 }
 
