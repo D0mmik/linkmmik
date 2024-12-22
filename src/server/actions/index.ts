@@ -4,7 +4,7 @@ import { auth } from "~/server/auth";
 import {revalidatePath, revalidateTag} from "next/cache";
 import ogs from 'open-graph-scraper';
 
-const BASE_URL = process.env.BASE_URL;
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function NewLink(longUrl: string) {
   const session = await auth();
