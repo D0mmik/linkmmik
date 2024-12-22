@@ -15,6 +15,13 @@
       "when": 1731620653885,
       "tag": "0001_init",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1734807125791,
+      "tag": "0002_material_molecule_man",
+      "breakpoints": true
     }
   ]
 }

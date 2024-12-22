@@ -1,23 +1,33 @@
 "use server";
-import { insertLink, shortKeyExists } from "~/server/db/links";
+import {deleteLink, insertLink, shortKeyExists} from "~/server/db/links";
 import { auth } from "~/server/auth";
 import {revalidatePath, revalidateTag} from "next/cache";
+import ogs from 'open-graph-scraper';
 
 const BASE_URL = process.env.BASE_URL;
 
-export default async function NewLink(longUrl: string) {
+export async function NewLink(longUrl: string) {
   const session = await auth();
   const key = await generateShortKey();
 
+  const data =  await ogs({url: longUrl})
+
   await insertLink({
-    id: 0,
     longUrl: longUrl,
     shortUrl: key,
     userId: session?.user?.id,
+    title: data.result.ogTitle,
+    imageUrl: data.result?.ogImage?.[0]?.url,
+    description: data.result?.ogDescription
   });
 
   revalidateTag("links")
   return `${BASE_URL}/${key}`;
+}
+
+export const DeleteLink = async (id: number) => {
+  await deleteLink(id);
+  revalidatePath("/links")
 }
 
 async function generateShortKey(): Promise<string> {

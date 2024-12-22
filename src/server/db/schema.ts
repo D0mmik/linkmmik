@@ -109,6 +109,6 @@ export const links = createTable("links", {
   shortUrl: varchar("shortUrl", { length: 255 }),
   longUrl: varchar("longUrl", { length: 255 }),
   title: varchar("title", { length: 255 }),
-  description: varchar("description", { length: 255 }),
+  description: varchar("description", { length: 1000 }),
   imageUrl: varchar("imageUrl", { length: 255 }),
 });

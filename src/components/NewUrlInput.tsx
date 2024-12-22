@@ -1,10 +1,10 @@
 "use client";
 import { Button, Input } from "@nextui-org/react";
-import NewLink from "~/server/actions";
 import { type KeyboardEvent, useState } from "react";
 import { Copy } from "lucide-react";
 import {Link} from "@nextui-org/link";
 import {useSession} from "next-auth/react";
+import {NewLink} from "~/server/actions";
 
 export default function NewUrlInput() {
   const [longUrl, setLongUrl] = useState("");
@@ -34,17 +34,18 @@ export default function NewUrlInput() {
 
   return (
     <div>
+      <h1 className="text-4xl mb-10 text-center">create new link</h1>
       <div className="flex gap-2">
         <Input
-          placeholder="Please provide url"
+          placeholder="please provide url"
           onChange={(e) => setLongUrl(e.target.value)}
           isInvalid={!URL.canParse(longUrl) && longUrl.length !== 0}
-          errorMessage="Please provide a correct URL"
+          errorMessage="please provide a correct URL"
           value={longUrl}
           onKeyDown={handleKeyDown}
         />
         <Button isIconOnly variant="faded" color="primary" onClick={paste}>
-          <Copy size={20} />
+          <Copy size={20}/>
         </Button>
         <Button
           color="primary"
@@ -52,13 +53,14 @@ export default function NewUrlInput() {
           isDisabled={!URL.canParse(longUrl) || longUrl.length === 0}
           isLoading={loading}
         >
-          Submit
+          submit
         </Button>
       </div>
       <div className="flex justify-center">
         <div className="flex justify-center flex-col items-center">
           <Link className="text-lg m-2" target="_blank" href={shortUrl}>{shortUrl}</Link>
-          {!session.data?.user && (shortUrl && <p className="text-gray-400 font-light m-2">To save your URL, please sign in to your account.</p>)}
+          {!session.data?.user && (shortUrl &&
+            <p className="text-gray-400 font-light m-2">To save your URL, please sign in to your account.</p>)}
         </div>
       </div>
     </div>

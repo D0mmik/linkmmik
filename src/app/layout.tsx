@@ -5,7 +5,6 @@ import { type Metadata } from "next";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "~/server/auth";
 import { Providers } from "~/components/Providers";
-import Navbar from "~/components/Navbar";
 
 export const metadata: Metadata = {
   title: "linkmmik",

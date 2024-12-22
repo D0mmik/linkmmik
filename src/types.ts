@@ -1,5 +1,5 @@
 export interface Link {
-  id: number;
+  id?: number;
   userId?: string | null;
   description?: string | null;
   shortUrl?: string | null;

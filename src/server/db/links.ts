@@ -8,9 +8,13 @@ export function insertLink(link: Link) {
   return db.insert(links).values(link).execute();
 }
 
+export function deleteLink(id: number) {
+  return db.delete(links).where(eq(links.id, id)).execute()
+}
+
 export const selectAllLinks = unstable_cache(
   async function selectAllLinks(userId: string) {
-    return db.select().from(links).where(eq(links.userId, userId));
+    return db.select().from(links).where(eq(links.userId, userId)).execute();
   },
   ["links"],
   { tags: ["links"]},
