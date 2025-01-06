@@ -3,8 +3,9 @@ import { Card, CardBody } from "@nextui-org/card";
 import type { Link as LinkType } from "~/types";
 import {Fragment, type MouseEvent, useState} from "react";
 import Link from "next/link";
-import { Button, Divider, Input } from "@nextui-org/react";
+import {Button, Chip, Divider, Input} from "@nextui-org/react";
 import {DeleteLink} from "~/server/actions";
+import {CirclePlus, GitPullRequestCreateArrow, PlusIcon, Trash, Trash2, Trash2Icon} from "lucide-react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
 
@@ -34,11 +35,33 @@ export default function LinkList({
 
   return (
     <>
-      <Input
-        placeholder="filter your links"
-        className="my-2"
-        onChange={(e) => setFilter(e.target.value)}
-      />
+      <div className="flex">
+        <Input
+          placeholder="filter your links"
+          className="mt-2"
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <p className="w-20 items-center flex ml-2 mt-2">{unfilteredLinks.length} links</p>
+      </div>
+      <div className="flex justify-between items-center">
+        <div className="my-2 flex items-center gap-1.5">
+          <Button variant="light" color="primary">
+            Create
+          </Button>
+          <Chip variant="flat" color="secondary">
+            Autobus
+          </Chip>
+          <Chip variant="flat" color="success">
+            Škola
+          </Chip>
+          <Chip variant="flat" color="danger">
+            Fortnite
+          </Chip>
+        </div>
+        <Button variant="light" color="primary">
+          Join a Group
+        </Button>
+      </div>
       {unfilteredLinks.length === 0 && (
         <p className="text-center text-lg">you have no links</p>
       )}
@@ -64,9 +87,10 @@ export default function LinkList({
                     color="danger"
                     variant="flat"
                     className="max-sm:hidden"
+                    isIconOnly
                     onClick={(e) => RemoveLink(e, link.id!)}
                   >
-                    delete
+                    <Trash2Icon />
                   </Button>
                 </div>
               </div>

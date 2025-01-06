@@ -20,7 +20,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
-      <body>
+      <body className="font-medium">
       <SessionProvider session={session}>
         <Providers>
           {children}
