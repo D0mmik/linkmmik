@@ -5,6 +5,7 @@ import {revalidatePath, revalidateTag} from "next/cache";
 import ogs from 'open-graph-scraper';
 import {Category} from "~/types";
 import {insertCategory, selectCategories} from "~/server/db/categories";
+import {MouseEvent} from "react";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 

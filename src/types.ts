@@ -11,9 +11,9 @@ export interface Link {
 
 export interface Category {
   name: string | null;
-  id?: number  | null;
+  id?: number;
   userId: string | null;
-  color: number | null;
+  color: number;
 }
 
 

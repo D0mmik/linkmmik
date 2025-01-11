@@ -17,8 +17,9 @@ export default  function Navbar() {
         <div className="flex gap-3">
           {session.data?.user ? (
             <div className="flex items-center gap-5">
-              <Button className="max-sm:hidden font-medium" color="primary" variant="shadow" as={Link} href="/">New Link</Button>
-              <Button color="primary" variant="light" as={Link} href="/links" className="font-medium">Your Links</Button>
+              <Button className="max-sm:hidden font-medium" color="primary" variant="shadow" as={Link} href="/" prefetch>New Link</Button>
+              <Button color="primary" variant="light" as={Link} href="/links" className="font-medium" prefetch>Your Links</Button>
+              <Button color="primary" variant="light" as={Link} href="/groups" className="font-medium" prefetch>Groups</Button>
               <Divider orientation="vertical"/>
               <Popover placement="bottom">
                 <PopoverTrigger>

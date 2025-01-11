@@ -16,12 +16,10 @@ export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
 
-  const session = await auth()
-
   return (
     <html lang="en" className={`${GeistSans.variable}`}>
       <body className="font-medium">
-      <SessionProvider session={session}>
+      <SessionProvider session={await auth()}>
         <Providers>
           {children}
         </Providers>
