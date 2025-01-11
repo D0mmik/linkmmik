@@ -1,7 +1,7 @@
-import { links } from "~/server/db/schema";
+import {categories, links} from "~/server/db/schema";
 import { db } from "~/server/db/index";
 import { eq } from "drizzle-orm";
-import { type Link } from "~/types";
+import {Category, type Link} from "~/types";
 import { unstable_cache } from "next/cache";
 
 export function insertLink(link: Link) {

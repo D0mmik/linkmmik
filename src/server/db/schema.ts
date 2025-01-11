@@ -111,4 +111,12 @@ export const links = createTable("links", {
   title: varchar("title", { length: 255 }),
   description: varchar("description", { length: 1000 }),
   imageUrl: varchar("imageUrl", { length: 255 }),
+  favicon: varchar("favicon", { length: 255 }),
 });
+
+export const categories = createTable("categories", {
+  id: serial("id"),
+  userId: varchar("userId", { length: 255 }),
+  name: varchar("name", { length: 100 }),
+  color: integer("color")
+})
