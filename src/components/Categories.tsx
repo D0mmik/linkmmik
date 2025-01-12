@@ -5,6 +5,7 @@ import {useSession} from "next-auth/react";
 import {CreateCategory} from "~/server/actions";
 import {type Category} from "~/types";
 import {getColor} from "~/utils";
+import Link from "next/link";
 
 export default function Categories({categories, setCategoryFunction} : {categories: Category[], setCategoryFunction: Dispatch<SetStateAction<Category | undefined>>}) {
 
@@ -35,10 +36,9 @@ export default function Categories({categories, setCategoryFunction} : {categori
   const updatedCategories = [allCategory, ...categories];
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="my-2 flex items-center gap-1.5">
+    <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex flex-wrap items-center gap-1.5 my-2">
         {updatedCategories.map((category, index) => {
-
           const active = activeChip === index
 
           return(
@@ -64,12 +64,12 @@ export default function Categories({categories, setCategoryFunction} : {categori
               color="primary"
               startContent={<PlusIcon size={16} />}
               size="sm"
-              className="min-w-[80px]"
+              className="min-w-[70px]"
             >
               Add
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="p-4">
+          <PopoverContent className="p-4 max-w-[90vw] sm:max-w-none">
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-1.5">
                 <h3 className="text-lg font-medium">Add new category</h3>
@@ -110,13 +110,6 @@ export default function Categories({categories, setCategoryFunction} : {categori
           </PopoverContent>
         </Popover>
       </div>
-      <Button 
-        variant="light" 
-        color="primary"
-        size="sm"
-      >
-        Join a Group
-      </Button>
     </div>
   );
 }

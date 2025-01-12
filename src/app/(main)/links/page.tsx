@@ -20,7 +20,7 @@ export default async function Links() {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center mt-4">
+    <div className="flex flex-col items-center justify-center sm:mt-4">
       <div className="w-full max-w-6xl px-4">
         <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-6">
           <h1 className="text-4xl font-bold">Your Links</h1>

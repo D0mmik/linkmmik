@@ -5,7 +5,7 @@ import {
   DropdownMenu,
   DropdownTrigger,
 } from "@nextui-org/react";
-import { PlusIcon } from "lucide-react";
+import { TagIcon } from "lucide-react";
 import { Category } from "~/types";
 import { getColor } from "~/utils";
 import { insertTag } from "~/server/db/tags";
@@ -24,13 +24,13 @@ export default function AddTag({
     <Dropdown>
       <DropdownTrigger>
         <Button
-          variant="flat"
+          variant="light"
+          className="opacity-0 transition-opacity group-hover:opacity-100 max-sm:opacity-100"
           size="sm"
-          className="opacity-0 transition-opacity group-hover:opacity-100"
-          startContent={<PlusIcon size={16} />}
+          isIconOnly
           onClick={(e) => e.preventDefault()}
         >
-          Add tag
+          <TagIcon size={16} />
         </Button>
       </DropdownTrigger>
       <DropdownMenu>

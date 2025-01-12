@@ -43,9 +43,6 @@ export default function LinkList({
           placeholder="filter your links"
           onChange={(e) => setFilter(e.target.value)}
         />
-        <Select className="w-80" defaultSelectedKeys={["time"]}>
-          <SelectItem key={"time"}>Sort by time</SelectItem>
-        </Select>
         <p className="ml-2 flex w-20 items-center">
           {unfilteredLinks.length} links
         </p>

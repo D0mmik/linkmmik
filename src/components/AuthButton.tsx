@@ -8,7 +8,7 @@ export default function AuthButton() {
 
   if (session.data?.user) {
     return (
-      <Button onClick={() => signOut()} variant="light">Sign Out</Button>
+      <Button onClick={() => signOut()} variant="light" color="danger">Sign Out</Button>
     )
   }
 

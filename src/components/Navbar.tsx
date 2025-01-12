@@ -16,17 +16,20 @@ export default  function Navbar() {
         </Link>
         <div className="flex gap-3">
           {session.data?.user ? (
-            <div className="flex items-center gap-5">
+            <div className="flex items-center sm:gap-5">
               <Button className="max-sm:hidden font-medium" color="primary" variant="shadow" as={Link} href="/" prefetch>New Link</Button>
-              <Button color="primary" variant="light" as={Link} href="/links" className="font-medium" prefetch>Your Links</Button>
-              <Button color="primary" variant="light" as={Link} href="/groups" className="font-medium" prefetch>Groups</Button>
-              <Divider orientation="vertical"/>
+              <Button color="primary" variant="light" as={Link} href="/links" className="font-medium max-sm:hidden" prefetch>Your Links</Button>
+              <Button color="primary" variant="light" as={Link} href="/groups" className="font-medium max-sm:hidden" prefetch>Groups</Button>
+              <Divider orientation="vertical" className="mx-2 max-sm:hidden"/>
               <Popover placement="bottom">
                 <PopoverTrigger>
                   <Avatar src={session.data?.user?.image ?? ""} />
                 </PopoverTrigger>
                 <PopoverContent>
                   <p className="text-lg">{session.data.user.name}</p>
+                  <Button color="primary" variant="light" as={Link} href="/" className="font-medium" prefetch>New Link</Button>
+                  <Button color="primary" variant="light" as={Link} href="/links" className="font-medium" prefetch>Your Links</Button>
+                  <Button color="primary" variant="light" as={Link} href="/groups" className="font-medium" prefetch>Groups</Button>
                   <AuthButton />
                 </PopoverContent>
               </Popover>

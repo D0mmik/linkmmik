@@ -1,14 +1,13 @@
 "use client"
-import { Card } from "@nextui-org/card";
 import { Button, useDisclosure } from "@nextui-org/react";
 import { PlusIcon, UserPlusIcon } from "lucide-react";
-import { useState } from "react";
 import GroupCard from "~/components/GroupCard";
 import CreateGroupModal from "~/components/CreateGroupModal";
 import JoinGroupModal from "~/components/JoinGroupModal";
-import {Group} from "~/types";
+import {type Group} from "~/types";
 
 export default function Groups({ groups }: {groups: Group[]}) {
+
   const {
     isOpen: isCreateOpen,
     onOpen: onCreateOpen,
