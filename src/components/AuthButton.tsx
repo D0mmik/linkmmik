@@ -12,7 +12,6 @@ export default function AuthButton() {
     )
   }
 
-
   return(
     <Button onClick={() => signIn()} color="primary" variant="shadow">Sign in</Button>
   )

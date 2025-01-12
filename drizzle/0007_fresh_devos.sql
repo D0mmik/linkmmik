@@ -1,0 +1,2 @@
+ALTER TABLE "linkmmik_categories" ADD CONSTRAINT "linkmmik_categories_id_unique" UNIQUE("id");--> statement-breakpoint
+ALTER TABLE "linkmmik_links" ADD CONSTRAINT "linkmmik_links_id_unique" UNIQUE("id");

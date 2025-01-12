@@ -1,76 +1,63 @@
 "use client";
-import { Card, CardBody } from "@nextui-org/card";
-import type { Link as LinkType } from "~/types";
-import {Fragment, type MouseEvent, useState} from "react";
-import Link from "next/link";
-import { Button, Divider, Input } from "@nextui-org/react";
-import {DeleteLink} from "~/server/actions";
-
-const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL
+import { Card } from "@nextui-org/card";
+import type {Category, Group, Link as LinkType} from "~/types";
+import { Fragment, useState } from "react";
+import { Divider, Input, Select, SelectItem } from "@nextui-org/react";
+import Categories from "~/components/Categories";
+import LinkRow from "~/components/LinkRow";
+import { Search } from "lucide-react";
 
 export default function LinkList({
   unfilteredLinks,
+  categories,
+  groups
 }: {
   unfilteredLinks: LinkType[];
+  categories: Category[];
+  groups: Group[];
 }) {
   const [filter, setFilter] = useState<string>();
-  const links = (links: LinkType[]) => {
-    if (!filter) return links;
-    return links.filter(
-      (link) =>
-        !(
-          !link.title?.toLowerCase().includes(filter) &&
-          !link.description?.toLowerCase().includes(filter) &&
-          !link.longUrl?.toLowerCase().includes(filter)
-        ),
-    );
-  };
+  const [category, setCategory] = useState<Category>()
 
-  const RemoveLink = async (e: MouseEvent, id: number) => {
-    e.preventDefault()
-    console.log(id)
-    await DeleteLink(id)
-  }
+  const links = (links: LinkType[]) => {
+    return links.filter((link) => {
+      const matchesFilter = !(
+        filter &&
+        !link.title?.toLowerCase().includes(filter) &&
+        !link.description?.toLowerCase().includes(filter) &&
+        !link.longUrl?.toLowerCase().includes(filter)
+      );
+
+      const matchesCategory = !category ||
+        link.categories?.some(cat => cat.id === category.id);
+
+      return matchesFilter && matchesCategory;
+    });
+  };
 
   return (
     <>
-      <Input
-        placeholder="filter your links"
-        className="my-2"
-        onChange={(e) => setFilter(e.target.value)}
-      />
+      <div className="flex items-center gap-2">
+        <Input
+          startContent={<Search size="18" />}
+          placeholder="filter your links"
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <Select className="w-80" defaultSelectedKeys={["time"]}>
+          <SelectItem key={"time"}>Sort by time</SelectItem>
+        </Select>
+        <p className="ml-2 flex w-20 items-center">
+          {unfilteredLinks.length} links
+        </p>
+      </div>
+      <Categories categories={categories} setCategoryFunction={setCategory}/>
       {unfilteredLinks.length === 0 && (
         <p className="text-center text-lg">you have no links</p>
       )}
       <Card>
         {links(unfilteredLinks).map((link: LinkType) => (
           <Fragment key={link.shortUrl}>
-            <CardBody
-              as={Link}
-              target="_blank"
-              href={`${BASE_URL}/${link.shortUrl ?? ""}`}
-            >
-              <div className="justify-between max-sm:flex">
-                <h3 className="text-lg font-medium max-sm:w-2/3 max-sm:text-base">
-                  {link.title}
-                </h3>
-                <div className="flex items-center gap-8 max-sm:w-20 max-sm:gap-0">
-                  <img
-                    className="w-40 rounded-xl max-sm:w-20"
-                    src={link.imageUrl!}
-                  ></img>
-                  <p className="w-full max-sm:hidden">{link.description!}</p>
-                  <Button
-                    color="danger"
-                    variant="flat"
-                    className="max-sm:hidden"
-                    onClick={(e) => RemoveLink(e, link.id!)}
-                  >
-                    delete
-                  </Button>
-                </div>
-              </div>
-            </CardBody>
+            <LinkRow link={link} categories={categories} groups={groups} />
             <Divider />
           </Fragment>
         ))}
