@@ -1,8 +1,9 @@
-import { pgTable, varchar, timestamp, index, foreignKey, serial, primaryKey, text, integer, pgSequence } from "drizzle-orm/pg-core"
+import { pgTable, varchar, timestamp, index, foreignKey, unique, serial, integer, primaryKey, text, pgSequence } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 
 export const gymikLogsIdSeq = pgSequence("gymik_logs_id_seq", {  startWith: "1", increment: "1", minValue: "1", maxValue: "2147483647", cache: "1", cycle: false })
+export const gymmikDaysIdSeq = pgSequence("gymmik_days_id_seq", {  startWith: "1", increment: "1", minValue: "1", maxValue: "2147483647", cache: "1", cycle: false })
 
 
 export const linkmmikUser = pgTable("linkmmik_user", {
@@ -30,13 +31,51 @@ export const linkmmikSession = pgTable("linkmmik_session", {
 });
 
 export const linkmmikLinks = pgTable("linkmmik_links", {
-	id: serial("id").notNull(),
+	id: serial("id").primaryKey().notNull(),
 	userId: varchar("userId", { length: 255 }),
 	shortUrl: varchar("shortUrl", { length: 255 }),
 	longUrl: varchar("longUrl", { length: 255 }),
 	title: varchar("title", { length: 255 }),
 	description: varchar("description", { length: 1000 }),
 	imageUrl: varchar("imageUrl", { length: 255 }),
+	favicon: varchar("favicon", { length: 255 }),
+},
+(table) => {
+	return {
+		linkmmikLinksIdUnique: unique("linkmmik_links_id_unique").on(table.id),
+	}
+});
+
+export const linkmmikCategories = pgTable("linkmmik_categories", {
+	id: serial("id").primaryKey().notNull(),
+	userId: varchar("userId", { length: 255 }),
+	name: varchar("name", { length: 100 }),
+	color: integer("color"),
+},
+(table) => {
+	return {
+		linkmmikCategoriesIdUnique: unique("linkmmik_categories_id_unique").on(table.id),
+	}
+});
+
+export const linkmmikLinkCategories = pgTable("linkmmik_link_categories", {
+	linkId: integer("linkId").notNull(),
+	categoryId: integer("categoryId").notNull(),
+},
+(table) => {
+	return {
+		linkmmikLinkCategoriesLinkIdLinkmmikLinksIdFk: foreignKey({
+			columns: [table.linkId],
+			foreignColumns: [linkmmikLinks.id],
+			name: "linkmmik_link_categories_linkId_linkmmik_links_id_fk"
+		}),
+		linkmmikLinkCategoriesCategoryIdLinkmmikCategoriesIdFk: foreignKey({
+			columns: [table.categoryId],
+			foreignColumns: [linkmmikCategories.id],
+			name: "linkmmik_link_categories_categoryId_linkmmik_categories_id_fk"
+		}),
+		linkCategoryPk: primaryKey({ columns: [table.linkId, table.categoryId], name: "link_category_pk"}),
+	}
 });
 
 export const linkmmikVerificationToken = pgTable("linkmmik_verification_token", {

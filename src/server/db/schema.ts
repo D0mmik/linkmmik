@@ -98,7 +98,7 @@ export const verificationTokens = createTable(
 );
 
 export const links = createTable("links", {
-  id: serial("id"),
+  id: serial("id").notNull(),
   userId: varchar("userId", { length: 255 }),
   shortUrl: varchar("shortUrl", { length: 255 }),
   longUrl: varchar("longUrl", { length: 255 }),
@@ -106,11 +106,37 @@ export const links = createTable("links", {
   description: varchar("description", { length: 1000 }),
   imageUrl: varchar("imageUrl", { length: 255 }),
   favicon: varchar("favicon", { length: 255 }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+  groupId: integer("groupId")
 });
 
 export const categories = createTable("categories", {
-  id: serial("id"),
+  id: serial("id").notNull(),
   userId: varchar("userId", { length: 255 }),
   name: varchar("name", { length: 100 }),
   color: integer("color")
+})
+
+export const tags = createTable("tags", {
+  id: serial("id").notNull(),
+  linkId: integer("linkId"),
+  tagId: integer("tagId"),
+  userId: varchar("userId", { length: 255 }),
+})
+
+export const groups = createTable("groups", {
+  id: serial("id").notNull(),
+  name: varchar("name", { length: 255 }),
+  description: varchar("description", { length: 255 }),
+  creatorId: varchar("creatorId", { length: 255 }),
+  memberCount: integer("memberCount"),
+  joinCode: varchar("joinCode", { length: 20 }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
+})
+
+export const groupMembers = createTable("groupMembers", {
+  id: serial("id"),
+  groupId: integer("groupId"),
+  memberId: varchar("memberId", { length: 255 }),
+  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
 })

@@ -14,15 +14,16 @@ export async function NewLink(longUrl: string) {
   const key = await generateShortKey();
 
   const data =  await ogs({url: longUrl})
+  const host = new URL(longUrl).origin;
 
   await insertLink({
     longUrl: longUrl,
     shortUrl: key,
     userId: session?.user?.id,
     title: data.result.ogTitle,
-    imageUrl: data.result?.ogImage?.[0]?.url,
+    imageUrl: fixUrl(data.result?.ogImage?.[0]?.url, host),
     description: data.result?.ogDescription,
-    favicon: data.result?.favicon
+    favicon: fixUrl(data.result?.favicon, host)
   });
 
   revalidateTag("links")
@@ -52,4 +53,9 @@ async function generateShortKey(): Promise<string> {
     ).join("");
   } while (await shortKeyExists(shortKey));
   return shortKey;
+}
+
+function fixUrl(url: string | undefined, host: string) {
+  if (url === undefined) return undefined;
+  return url.startsWith('/') ? `${host}${url}` : url
 }

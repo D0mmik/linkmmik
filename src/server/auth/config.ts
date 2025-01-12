@@ -23,7 +23,8 @@ export const authConfig = {
   providers: [
     GithubProvider({
       clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? ""
+      clientSecret: process.env.GITHUB_SECRET ?? "",
+      allowDangerousEmailAccountLinking: true
     }),
     GoogleProvider({
       clientId: process.env.GOOGLE_ID ?? "",

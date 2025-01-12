@@ -1,0 +1,1 @@
+ALTER TABLE "linkmmik_link_categories" DROP CONSTRAINT "link_category_pk";

@@ -9,7 +9,7 @@ export default function LinkChip({url} : {url: string}) {
 
   return(
     <Chip
-      className="mt-2 hover:text-blue-600"
+      className="hover:text-blue-600"
       variant="flat"
       radius="md"
       onClick={async (e) => {

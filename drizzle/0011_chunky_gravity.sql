@@ -1,0 +1,1 @@
+DROP TABLE "linkmmik_link_categories";

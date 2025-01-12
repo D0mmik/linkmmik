@@ -1,0 +1,1 @@
+ALTER TABLE "linkmmik_links" ADD PRIMARY KEY ("id");
