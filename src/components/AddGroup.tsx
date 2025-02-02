@@ -1,13 +1,13 @@
+import { UsersIcon } from "lucide-react";
+import { type Group } from "~/types";
+import { AddGroupToLink } from "~/server/db/links";
 import {
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/react";
-import { UsersIcon } from "lucide-react";
-import { type Group } from "~/types";
-import { AddGroupToLink } from "~/server/db/links";
+} from "@nextui-org/dropdown";
+import { Button } from "@nextui-org/button";
 
 export default function AddGroup({
   linkId,
@@ -31,8 +31,8 @@ export default function AddGroup({
       </DropdownTrigger>
       <DropdownMenu>
         {groups?.map((group) => (
-          <DropdownItem 
-            key={group.id ?? undefined} 
+          <DropdownItem
+            key={group.id ?? undefined}
             onClick={() => AddGroupToLink(linkId, group.id ?? undefined)}
           >
             {group.name}

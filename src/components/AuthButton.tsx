@@ -1,12 +1,12 @@
-"use client"
-import { signIn, signOut, useSession } from "next-auth/react";
-import { Button } from "@nextui-org/react";
+import { signIn, signOut } from "next-auth/react";
+import { Button } from "@nextui-org/button";
+import {auth} from "~/server/auth";
 
-export default function AuthButton() {
+export default async function AuthButton() {
 
-  const session = useSession()
+  const session = await auth()
 
-  if (session.data?.user) {
+  if (session?.user) {
     return (
       <Button onClick={() => signOut()} variant="light" color="danger">Sign Out</Button>
     )

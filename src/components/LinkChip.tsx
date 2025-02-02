@@ -1,6 +1,6 @@
 "use client"
 import {Check, Copy} from "lucide-react";
-import {Chip} from "@nextui-org/react";
+import {Chip} from "@nextui-org/chip";
 import {useState} from "react";
 
 export default function LinkChip({url} : {url: string}) {

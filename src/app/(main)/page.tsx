@@ -1,6 +1,6 @@
 "use client";
 
-import { Button } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Link2, Shield, Zap } from "lucide-react";

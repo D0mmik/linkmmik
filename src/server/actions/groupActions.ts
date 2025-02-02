@@ -1,6 +1,6 @@
 "use server";
 
-import { Group } from "~/types";
+import { type Group } from "~/types";
 import {
   insertGroup,
   insertMember, selectGroupIdByCode,

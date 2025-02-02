@@ -1,35 +1,46 @@
-import {Button, Chip, Input, Popover, PopoverContent, PopoverTrigger} from "@nextui-org/react";
-import {PlusIcon} from "lucide-react";
-import {type Dispatch, type SetStateAction, useState} from "react";
-import {useSession} from "next-auth/react";
-import {CreateCategory} from "~/server/actions";
-import {type Category} from "~/types";
-import {getColor} from "~/utils";
-import Link from "next/link";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@nextui-org/popover";
+import { PlusIcon } from "lucide-react";
+import { type Dispatch, type SetStateAction, useState } from "react";
+import { useSession } from "next-auth/react";
+import { CreateCategory } from "~/server/actions";
+import { type Category } from "~/types";
+import { getColor } from "~/utils";
+import { Button } from "@nextui-org/button";
+import { Input } from "@nextui-org/input";
+import {Chip} from "@nextui-org/chip";
 
-export default function Categories({categories, setCategoryFunction} : {categories: Category[], setCategoryFunction: Dispatch<SetStateAction<Category | undefined>>}) {
+export default function Categories({
+  categories,
+  setCategoryFunction,
+}: {
+  categories: Category[];
+  setCategoryFunction: Dispatch<SetStateAction<Category | undefined>>;
+}) {
+  const [name, setName] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeChip, setActiveChip] = useState(0);
 
-  const [name, setName] = useState("")
-  const [isOpen, setIsOpen] = useState(false)
-  const [activeChip, setActiveChip] = useState(0)
-
-  const session = useSession()
+  const session = useSession();
 
   async function create() {
     if (name.trim()) {
       await CreateCategory({
         name: name.trim(),
         userId: session.data?.user?.id ?? "",
-        color: Math.ceil(Math.random() * 4)
-      })
-      setName("")
-      setIsOpen(false)
+        color: Math.ceil(Math.random() * 4),
+      });
+      setName("");
+      setIsOpen(false);
     }
   }
 
-  function handleSetCategory(index: number){
-    setActiveChip(index)
-    setCategoryFunction(categories[index - 1])
+  function handleSetCategory(index: number) {
+    setActiveChip(index);
+    setCategoryFunction(categories[index - 1]);
   }
 
   const allCategory: Category = { name: "All", id: -1, userId: "", color: 5 };
@@ -37,11 +48,11 @@ export default function Categories({categories, setCategoryFunction} : {categori
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="flex flex-wrap items-center gap-1.5 my-2">
+      <div className="my-2 flex flex-wrap items-center gap-1.5">
         {updatedCategories.map((category, index) => {
-          const active = activeChip === index
+          const active = activeChip === index;
 
-          return(
+          return (
             <Chip
               key={category.id}
               color={getColor(category.color!)}
@@ -51,11 +62,11 @@ export default function Categories({categories, setCategoryFunction} : {categori
             >
               {category.name}
             </Chip>
-          )
+          );
         })}
-        <Popover 
-          placement="bottom-start" 
-          isOpen={isOpen} 
+        <Popover
+          placement="bottom-start"
+          isOpen={isOpen}
           onOpenChange={setIsOpen}
         >
           <PopoverTrigger>
@@ -69,7 +80,7 @@ export default function Categories({categories, setCategoryFunction} : {categori
               Add
             </Button>
           </PopoverTrigger>
-          <PopoverContent className="p-4 max-w-[90vw] sm:max-w-none">
+          <PopoverContent className="max-w-[90vw] p-4 sm:max-w-none">
             <div className="flex flex-col gap-3">
               <div className="flex flex-col gap-1.5">
                 <h3 className="text-lg font-medium">Add new category</h3>
@@ -85,12 +96,12 @@ export default function Categories({categories, setCategoryFunction} : {categori
                 labelPlacement="outside"
                 autoFocus
                 classNames={{
-                  input: "text-sm"
+                  input: "text-sm",
                 }}
               />
-              <div className="flex justify-end gap-2 mt-1">
-                <Button 
-                  variant="light" 
+              <div className="mt-1 flex justify-end gap-2">
+                <Button
+                  variant="light"
                   color="default"
                   size="sm"
                   onClick={() => setIsOpen(false)}

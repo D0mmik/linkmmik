@@ -2,7 +2,8 @@
 import { Card } from "@nextui-org/card";
 import type {Category, Group, Link as LinkType} from "~/types";
 import { Fragment, useState } from "react";
-import { Divider, Input, Select, SelectItem } from "@nextui-org/react";
+import { Divider } from "@nextui-org/divider";
+import { Input } from "@nextui-org/input";
 import Categories from "~/components/Categories";
 import LinkRow from "~/components/LinkRow";
 import { Search } from "lucide-react";

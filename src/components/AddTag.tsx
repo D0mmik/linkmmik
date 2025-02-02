@@ -1,15 +1,15 @@
 import {
-  Button,
   Dropdown,
   DropdownItem,
   DropdownMenu,
   DropdownTrigger,
-} from "@nextui-org/react";
+} from "@nextui-org/dropdown";
 import { TagIcon } from "lucide-react";
-import { Category } from "~/types";
+import { type Category } from "~/types";
 import { getColor } from "~/utils";
 import { insertTag } from "~/server/db/tags";
 import { useSession } from "next-auth/react";
+import { Button } from "@nextui-org/button";
 
 export default function AddTag({
   linkId,

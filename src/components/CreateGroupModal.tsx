@@ -1,6 +1,8 @@
-import { Button, Input, Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/react";
+import { Modal, ModalContent, ModalHeader, ModalBody, ModalFooter } from "@nextui-org/modal";
 import {CreateGroup} from "~/server/actions/groupActions";
 import {useState} from "react";
+import {Input} from "@nextui-org/input";
+import {Button} from "@nextui-org/button";
 
 interface CreateGroupModalProps {
   isOpen: boolean;

@@ -1,4 +1,5 @@
-import {Button, Chip} from "@nextui-org/react";
+import {Button} from "@nextui-org/button";
+import {Chip} from "@nextui-org/chip";
 import { Trash2Icon, PlusIcon, UsersIcon } from "lucide-react";
 import { CardBody } from "@nextui-org/card";
 import {type Category, type Group, type Link as LinkType} from "~/types";
