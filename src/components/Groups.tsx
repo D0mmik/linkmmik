@@ -1,10 +1,11 @@
 "use client"
-import { Button, useDisclosure } from "@nextui-org/react";
+import { Button } from "@nextui-org/button";
 import { PlusIcon, UserPlusIcon } from "lucide-react";
 import GroupCard from "~/components/GroupCard";
 import CreateGroupModal from "~/components/CreateGroupModal";
 import JoinGroupModal from "~/components/JoinGroupModal";
 import {type Group} from "~/types";
+import {useDisclosure} from "@nextui-org/use-disclosure";
 
 export default function Groups({ groups }: {groups: Group[]}) {
 

@@ -3,15 +3,22 @@ import {deleteLink, insertLink, shortKeyExists} from "~/server/db/links";
 import { auth } from "~/server/auth";
 import {revalidatePath, revalidateTag} from "next/cache";
 import ogs from 'open-graph-scraper';
-import {Category} from "~/types";
-import {insertCategory, selectCategories} from "~/server/db/categories";
-import {MouseEvent} from "react";
+import {type Category} from "~/types";
+import {deleteCategory, insertCategory, selectCategories} from "~/server/db/categories";
+import posthog from "posthog-js";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function NewLink(longUrl: string) {
   const session = await auth();
   const key = await generateShortKey();
+
+  posthog.capture("new_link", {
+    long_url: longUrl,
+    short_key: key,
+    user_id: session?.user?.id,
+    timestamp: new Date().toISOString()
+  });
 
   const data =  await ogs({url: longUrl})
   const host = new URL(longUrl).origin;
@@ -40,7 +47,10 @@ export const CreateCategory = async (category: Category) => {
   revalidatePath("/links")
 }
 
-export const GetCategories = async (userId: string) => await selectCategories(userId)
+export const DeleteCategory = async (categoryId: number) => {
+  await deleteCategory(categoryId)
+  revalidatePath("/links")
+}
 
 async function generateShortKey(): Promise<string> {
   const c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

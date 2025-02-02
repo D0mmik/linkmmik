@@ -3,10 +3,11 @@ import {
   index,
   integer,
   pgTableCreator,
-  primaryKey, serial,
+  primaryKey,
+  serial,
   text,
   timestamp,
-  varchar
+  varchar,
 } from "drizzle-orm/pg-core";
 import { type AdapterAccount } from "next-auth/adapters";
 
@@ -52,7 +53,7 @@ export const accounts = createTable(
       columns: [account.provider, account.providerAccountId],
     }),
     userIdIdx: index("account_user_id_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -75,7 +76,7 @@ export const sessions = createTable(
   },
   (session) => ({
     userIdIdx: index("session_user_id_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -94,49 +95,79 @@ export const verificationTokens = createTable(
   },
   (vt) => ({
     compoundKey: primaryKey({ columns: [vt.identifier, vt.token] }),
-  })
+  }),
 );
 
-export const links = createTable("links", {
-  id: serial("id").notNull(),
-  userId: varchar("userId", { length: 255 }),
-  shortUrl: varchar("shortUrl", { length: 255 }),
-  longUrl: varchar("longUrl", { length: 255 }),
-  title: varchar("title", { length: 255 }),
-  description: varchar("description", { length: 1000 }),
-  imageUrl: varchar("imageUrl", { length: 255 }),
-  favicon: varchar("favicon", { length: 255 }),
-  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-  groupId: integer("groupId")
-});
+export const links = createTable(
+  "links",
+  {
+    id: serial("id").primaryKey(),
+    userId: varchar("userId", { length: 255 }),
+    shortUrl: varchar("shortUrl", { length: 255 }),
+    longUrl: varchar("longUrl", { length: 255 }),
+    title: varchar("title", { length: 255 }),
+    description: varchar("description", { length: 1000 }),
+    imageUrl: varchar("imageUrl", { length: 255 }),
+    favicon: varchar("favicon", { length: 255 }),
+    createdAt: timestamp("created_at", {
+      mode: "date",
+      withTimezone: true,
+    }).default(sql`CURRENT_TIMESTAMP`),
+    groupId: integer("groupId"),
+  },
+  (t) => {
+    return {
+      userIdx: index("userId_idx_links").on(t.userId),
+      shortUrlIdx: index("shortUrl_idx_links").on(t.shortUrl)
+    }
+  }
+);
 
 export const categories = createTable("categories", {
-  id: serial("id").notNull(),
-  userId: varchar("userId", { length: 255 }),
+  id: serial("id").primaryKey(),
+  userId: varchar("userId", { length: 255 }).references(() => users.id),
   name: varchar("name", { length: 100 }),
-  color: integer("color")
-})
+  color: integer("color"),
+},
+  (t) => {
+    return {
+      userIdx: index("userId_idx_categories").on(t.userId)
+    }
+  }
+);
 
 export const tags = createTable("tags", {
-  id: serial("id").notNull(),
+  id: serial("id").primaryKey(),
   linkId: integer("linkId"),
   tagId: integer("tagId"),
-  userId: varchar("userId", { length: 255 }),
-})
+  userId: varchar("userId", { length: 255 }).references(() => users.id),
+},
+  (t) => {
+    return {
+      userIdx: index("userId_idx_tags").on(t.userId)
+    }
+  }
+);
 
 export const groups = createTable("groups", {
-  id: serial("id").notNull(),
+  id: serial("id").primaryKey(),
   name: varchar("name", { length: 255 }),
   description: varchar("description", { length: 255 }),
-  creatorId: varchar("creatorId", { length: 255 }),
+  creatorId: varchar("creatorId", { length: 255 }).references(() => users.id),
   memberCount: integer("memberCount"),
   joinCode: varchar("joinCode", { length: 20 }),
-  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-})
+  createdAt: timestamp("created_at", {
+    mode: "date",
+    withTimezone: true,
+  }).default(sql`CURRENT_TIMESTAMP`),
+});
 
 export const groupMembers = createTable("groupMembers", {
-  id: serial("id"),
-  groupId: integer("groupId"),
-  memberId: varchar("memberId", { length: 255 }),
-  createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).default(sql`CURRENT_TIMESTAMP`),
-})
+  id: serial("id").primaryKey(),
+  groupId: integer("groupId").references(() => groups.id),
+  memberId: varchar("memberId", { length: 255 }).references(() => users.id),
+  createdAt: timestamp("created_at", {
+    mode: "date",
+    withTimezone: true,
+  }).default(sql`CURRENT_TIMESTAMP`),
+});

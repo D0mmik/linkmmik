@@ -1,9 +1,7 @@
-import { pgTable, varchar, timestamp, index, foreignKey, unique, serial, integer, primaryKey, text, pgSequence } from "drizzle-orm/pg-core"
+import { pgTable, varchar, timestamp, index, foreignKey, serial, integer, primaryKey, text } from "drizzle-orm/pg-core"
   import { sql } from "drizzle-orm"
 
 
-export const gymikLogsIdSeq = pgSequence("gymik_logs_id_seq", {  startWith: "1", increment: "1", minValue: "1", maxValue: "2147483647", cache: "1", cycle: false })
-export const gymmikDaysIdSeq = pgSequence("gymmik_days_id_seq", {  startWith: "1", increment: "1", minValue: "1", maxValue: "2147483647", cache: "1", cycle: false })
 
 
 export const linkmmikUser = pgTable("linkmmik_user", {
@@ -30,8 +28,39 @@ export const linkmmikSession = pgTable("linkmmik_session", {
 	}
 });
 
-export const linkmmikLinks = pgTable("linkmmik_links", {
+export const linkmmikCategories = pgTable("linkmmik_categories", {
 	id: serial("id").primaryKey().notNull(),
+	userId: varchar("userId", { length: 255 }),
+	name: varchar("name", { length: 100 }),
+	color: integer("color"),
+});
+
+export const linkmmikTags = pgTable("linkmmik_tags", {
+	id: serial("id").notNull(),
+	linkId: integer("linkId"),
+	tagId: integer("tagId"),
+	userId: varchar("userId", { length: 255 }),
+});
+
+export const linkmmikGroupMembers = pgTable("linkmmik_groupMembers", {
+	id: serial("id").notNull(),
+	groupId: integer("groupId"),
+	memberId: varchar("memberId", { length: 255 }),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
+});
+
+export const linkmmikGroups = pgTable("linkmmik_groups", {
+	id: serial("id").notNull(),
+	name: varchar("name", { length: 255 }),
+	description: varchar("description", { length: 255 }),
+	creatorId: varchar("creatorId", { length: 255 }),
+	memberCount: integer("memberCount"),
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
+	joinCode: varchar("joinCode", { length: 20 }),
+});
+
+export const linkmmikLinks = pgTable("linkmmik_links", {
+	id: serial("id").notNull(),
 	userId: varchar("userId", { length: 255 }),
 	shortUrl: varchar("shortUrl", { length: 255 }),
 	longUrl: varchar("longUrl", { length: 255 }),
@@ -39,43 +68,8 @@ export const linkmmikLinks = pgTable("linkmmik_links", {
 	description: varchar("description", { length: 1000 }),
 	imageUrl: varchar("imageUrl", { length: 255 }),
 	favicon: varchar("favicon", { length: 255 }),
-},
-(table) => {
-	return {
-		linkmmikLinksIdUnique: unique("linkmmik_links_id_unique").on(table.id),
-	}
-});
-
-export const linkmmikCategories = pgTable("linkmmik_categories", {
-	id: serial("id").primaryKey().notNull(),
-	userId: varchar("userId", { length: 255 }),
-	name: varchar("name", { length: 100 }),
-	color: integer("color"),
-},
-(table) => {
-	return {
-		linkmmikCategoriesIdUnique: unique("linkmmik_categories_id_unique").on(table.id),
-	}
-});
-
-export const linkmmikLinkCategories = pgTable("linkmmik_link_categories", {
-	linkId: integer("linkId").notNull(),
-	categoryId: integer("categoryId").notNull(),
-},
-(table) => {
-	return {
-		linkmmikLinkCategoriesLinkIdLinkmmikLinksIdFk: foreignKey({
-			columns: [table.linkId],
-			foreignColumns: [linkmmikLinks.id],
-			name: "linkmmik_link_categories_linkId_linkmmik_links_id_fk"
-		}),
-		linkmmikLinkCategoriesCategoryIdLinkmmikCategoriesIdFk: foreignKey({
-			columns: [table.categoryId],
-			foreignColumns: [linkmmikCategories.id],
-			name: "linkmmik_link_categories_categoryId_linkmmik_categories_id_fk"
-		}),
-		linkCategoryPk: primaryKey({ columns: [table.linkId, table.categoryId], name: "link_category_pk"}),
-	}
+	createdAt: timestamp("created_at", { withTimezone: true, mode: 'string' }).default(sql`CURRENT_TIMESTAMP`),
+	groupId: integer("groupId"),
 });
 
 export const linkmmikVerificationToken = pgTable("linkmmik_verification_token", {

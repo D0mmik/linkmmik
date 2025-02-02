@@ -32,10 +32,13 @@
     "next-auth": "5.0.0-beta.25",
     "open-graph-scraper": "^6.8.3",
     "postgres": "^3.4.4",
+    "posthog-js": "^1.215.1",
+    "pusher": "^5.2.0",
+    "pusher-js": "^8.4.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "vercel": "^39.0.2",
-    "zod": "^3.23.3"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/eslint": "^8.56.10",

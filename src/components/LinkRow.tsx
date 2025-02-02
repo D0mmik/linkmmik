@@ -1,4 +1,5 @@
-import {Button, Chip} from "@nextui-org/react";
+import {Button} from "@nextui-org/button";
+import {Chip} from "@nextui-org/chip";
 import { Trash2Icon, PlusIcon, UsersIcon } from "lucide-react";
 import { CardBody } from "@nextui-org/card";
 import {type Category, type Group, type Link as LinkType} from "~/types";
@@ -9,12 +10,13 @@ import LinkChip from "~/components/LinkChip";
 import AddTag from "~/components/AddTag";
 import {getColor} from "~/utils";
 import AddGroup from "~/components/AddGroup";
+import {env} from "~/env";
 
 export default function LinkRow({ link, categories, groups }: { link: LinkType; categories: Category[], groups: Group[] }) {
 
   if (link.id === undefined) return <p>Id is missing</p>
 
-  const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
+  const BASE_URL = env.NEXT_PUBLIC_BASE_URL;
   const url = `${BASE_URL}/${link.shortUrl}`;
 
   const RemoveLink = async (e: MouseEvent, id: number) => {
