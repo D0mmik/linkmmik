@@ -3,6 +3,9 @@ import {categories, groupMembers, links, tags} from "~/server/db/schema";
 import { db } from "~/server/db/index";
 import {and, eq, isNull, or, sql} from "drizzle-orm";
 import {type Category, type Link} from "~/types";
+import {pusherServer} from "~/utils/pusher";
+import {auth} from "~/server/auth";
+import {revalidatePath} from "next/cache";
 
 export async function insertLink(link: Link) {
   return db.insert(links).values(link).execute();
@@ -78,5 +81,11 @@ export async function shortKeyExists(shortKey: string) {
 
 export async function AddGroupToLink(linkId: number, groupId: number | undefined) {
   if (groupId === undefined) return;
-  return db.update(links).set({groupId: groupId}).where(eq(links.id, linkId))
+
+  const senderId = (await auth())?.user.id
+  await db.update(links).set({groupId: groupId}).where(eq(links.id, linkId))
+
+  await pusherServer.trigger(`group-${groupId}`, "new-link", { senderId });
+
+  revalidatePath("/links")
 }

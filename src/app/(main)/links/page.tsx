@@ -4,6 +4,7 @@ import { selectAllLinks } from "~/server/db/links";
 import { redirect } from "next/navigation";
 import { selectCategories } from "~/server/db/categories";
 import { selectGroupsWithId } from "~/server/db/groups";
+import {GroupListener} from "~/components/GroupListener";
 
 export default async function Links() {
   const session = await auth();
@@ -32,6 +33,7 @@ export default async function Links() {
           categories={categories}
           groups={groups}
         />
+        <GroupListener groups={groups}/>
       </div>
     </div>
   );

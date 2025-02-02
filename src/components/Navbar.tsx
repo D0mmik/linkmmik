@@ -38,7 +38,7 @@ export default async function Navbar() {
               </Popover>
             </div>
           ) :
-          <Button onClick={() => signIn()} color="primary" variant="shadow">Sign in</Button> }
+          <AuthButton/> }
         </div>
       </div>
     </div>
