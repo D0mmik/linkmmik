@@ -8,10 +8,10 @@ export async function insertCategory(category: Category) {
   return db.insert(categories).values(category).execute();
 }
 
-export async function selectCategories(userId: string) {
-  return db.select().from(categories).where(eq(categories.userId, userId));
+export async function deleteCategory(categoryId: number) {
+  return db.delete(categories).where(eq(categories.id, categoryId))
 }
 
-export async function selectCategoriesByIds(ids: number[]) {
-  return db.select().from(categories).where(inArray(categories.id, ids));
+export async function selectCategories(userId: string) {
+  return db.select().from(categories).where(eq(categories.userId, userId));
 }

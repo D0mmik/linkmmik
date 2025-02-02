@@ -2,7 +2,7 @@
 import { type Group } from "~/types";
 import { db } from "~/server/db/index";
 import { groupMembers, groups } from "~/server/db/schema";
-import {eq, sql} from "drizzle-orm";
+import {and, eq, sql} from "drizzle-orm";
 
 export async function insertGroup(group: Group) {
   return db.insert(groups).values(group).returning({ insertedId: groups.id });
@@ -35,6 +35,10 @@ export async function insertMember(memberId: string, groupId: number) {
     .insert(groupMembers)
     .values({ memberId: memberId, groupId: groupId })
     .execute();
+}
+
+export async function removeMember(memberId: string, groupId: number) {
+  return db.delete(groupMembers).where(and(eq(groupMembers.memberId, memberId), eq(groupMembers.groupId, groupId)))
 }
 
 export async function selectGroupIdByCode(code: string) {

@@ -3,10 +3,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@nextui-org/popover";
-import { PlusIcon } from "lucide-react";
+import {PlusIcon, Trash2Icon} from "lucide-react";
 import { type Dispatch, type SetStateAction, useState } from "react";
 import { useSession } from "next-auth/react";
-import { CreateCategory } from "~/server/actions";
+import {CreateCategory, DeleteCategory} from "~/server/actions";
 import { type Category } from "~/types";
 import { getColor } from "~/utils";
 import { Button } from "@nextui-org/button";
@@ -48,20 +48,20 @@ export default function Categories({
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <div className="my-2 flex flex-wrap items-center gap-1.5">
+      <div className="my-2 flex flex-wrap items-center">
         {updatedCategories.map((category, index) => {
           const active = activeChip === index;
 
           return (
             <Chip
-              key={category.id}
-              color={getColor(category.color!)}
-              variant={active ? "solid" : "light"}
-              onClick={() => handleSetCategory(index)}
-              className="cursor-pointer"
-            >
-              {category.name}
-            </Chip>
+            key={category.id}
+            color={getColor(category.color!)}
+            variant={active ? "solid" : "light"}
+            onClick={() => handleSetCategory(index)}
+            className="cursor-pointer group transition-all duration-200 ease-in-out"
+          >
+              <p>{category.name}</p>
+          </Chip>
           );
         })}
         <Popover

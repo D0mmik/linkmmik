@@ -4,7 +4,7 @@ import { auth } from "~/server/auth";
 import {revalidatePath, revalidateTag} from "next/cache";
 import ogs from 'open-graph-scraper';
 import {type Category} from "~/types";
-import {insertCategory, selectCategories} from "~/server/db/categories";
+import {deleteCategory, insertCategory, selectCategories} from "~/server/db/categories";
 import posthog from "posthog-js";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
@@ -47,7 +47,10 @@ export const CreateCategory = async (category: Category) => {
   revalidatePath("/links")
 }
 
-export const GetCategories = async (userId: string) => await selectCategories(userId)
+export const DeleteCategory = async (categoryId: number) => {
+  await deleteCategory(categoryId)
+  revalidatePath("/links")
+}
 
 async function generateShortKey(): Promise<string> {
   const c = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";

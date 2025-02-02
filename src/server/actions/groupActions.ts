@@ -3,7 +3,7 @@
 import { type Group } from "~/types";
 import {
   insertGroup,
-  insertMember, selectGroupIdByCode,
+  insertMember, removeMember, selectGroupIdByCode,
   selectGroupsWithId,
 } from "~/server/db/groups";
 import { auth } from "~/server/auth";
@@ -38,4 +38,12 @@ export async function GetAllGroupsById() {
   if (session?.user?.id === undefined) return;
 
   return await selectGroupsWithId(session.user.id);
+}
+
+export async function DeleteMember(groupId: number) {
+  const session = await auth();
+  if (session?.user?.id === undefined) return;
+
+  await removeMember(session?.user?.id, groupId);
+  revalidatePath("/links")
 }
