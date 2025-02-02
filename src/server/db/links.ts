@@ -82,6 +82,8 @@ export async function shortKeyExists(shortKey: string) {
 export async function AddGroupToLink(linkId: number, groupId: number | undefined) {
   if (groupId === undefined) return;
 
+  console.log("auto")
+
   const senderId = (await auth())?.user.id
   await db.update(links).set({groupId: groupId}).where(eq(links.id, linkId))
 

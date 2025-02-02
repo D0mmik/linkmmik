@@ -10,6 +10,7 @@ import {
   users,
   verificationTokens,
 } from "~/server/db/schema";
+import {env} from "~/env";
 
 declare module "next-auth" {
   interface Session extends DefaultSession {
@@ -22,13 +23,13 @@ declare module "next-auth" {
 export const authConfig = {
   providers: [
     GithubProvider({
-      clientId: process.env.GITHUB_ID ?? "",
-      clientSecret: process.env.GITHUB_SECRET ?? "",
+      clientId: env.GITHUB_ID ?? "",
+      clientSecret: env.GITHUB_SECRET ?? "",
       allowDangerousEmailAccountLinking: true
     }),
     GoogleProvider({
-      clientId: process.env.GOOGLE_ID ?? "",
-      clientSecret: process.env.GOOGLE_SECRET ?? "",
+      clientId: env.GOOGLE_ID ?? "",
+      clientSecret: env.GOOGLE_SECRET ?? "",
       allowDangerousEmailAccountLinking: true
     }),
   ],

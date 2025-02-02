@@ -5,12 +5,20 @@ import {revalidatePath, revalidateTag} from "next/cache";
 import ogs from 'open-graph-scraper';
 import {type Category} from "~/types";
 import {insertCategory, selectCategories} from "~/server/db/categories";
+import posthog from "posthog-js";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function NewLink(longUrl: string) {
   const session = await auth();
   const key = await generateShortKey();
+
+  posthog.capture("new_link", {
+    long_url: longUrl,
+    short_key: key,
+    user_id: session?.user?.id,
+    timestamp: new Date().toISOString()
+  });
 
   const data =  await ogs({url: longUrl})
   const host = new URL(longUrl).origin;
