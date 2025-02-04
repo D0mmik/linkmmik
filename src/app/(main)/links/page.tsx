@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { selectCategories } from "~/server/db/categories";
 import { selectGroupsWithId } from "~/server/db/groups";
 import {GroupListener} from "~/components/GroupListener";
+import {UserListener} from "~/components/UserListener";
 
 export default async function Links() {
   const session = await auth();
@@ -34,6 +35,7 @@ export default async function Links() {
           groups={groups}
         />
         <GroupListener groups={groups}/>
+        <UserListener/>
       </div>
     </div>
   );

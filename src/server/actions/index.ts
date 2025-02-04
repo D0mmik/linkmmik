@@ -6,17 +6,19 @@ import ogs from 'open-graph-scraper';
 import {type Category} from "~/types";
 import {deleteCategory, insertCategory, selectCategories} from "~/server/db/categories";
 import posthog from "posthog-js";
+import {pusherServer} from "~/utils/pusher";
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL;
 
 export async function NewLink(longUrl: string) {
   const session = await auth();
+  const userId = session?.user?.id;
   const key = await generateShortKey();
 
   posthog.capture("new_link", {
     long_url: longUrl,
     short_key: key,
-    user_id: session?.user?.id,
+    user_id: userId,
     timestamp: new Date().toISOString()
   });
 
@@ -26,12 +28,14 @@ export async function NewLink(longUrl: string) {
   await insertLink({
     longUrl: longUrl,
     shortUrl: key,
-    userId: session?.user?.id,
+    userId: userId,
     title: data.result.ogTitle,
     imageUrl: fixUrl(data.result?.ogImage?.[0]?.url, host),
     description: data.result?.ogDescription,
     favicon: fixUrl(data.result?.favicon, host)
   });
+
+  await pusherServer.trigger(`user-${userId}`, "new-link-user", { userId });
 
   revalidateTag("links")
   return `${BASE_URL}/${key}`;
