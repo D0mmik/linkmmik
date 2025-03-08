@@ -11,7 +11,7 @@ export default async function Links() {
   const session = await auth();
 
   const userId = session?.user?.id;
-  if (!userId) return <p>login</p>;
+  if (!userId) return redirect('/api/auth/signin');
 
   const [links, categories, groups] = await Promise.all([
     selectAllLinks(userId),
