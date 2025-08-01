@@ -1,4 +1,4 @@
-# [linkmmik.app](https://linkmmik.app)
+# [linkmmik.app](https://linkmmik.vercel.app)
 
 ### Installation
 
